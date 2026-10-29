@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Impostazioni · Ogni Passaggio Conta</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalnia:wght@600;700&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/stile.css">
+</head>
+<body>
+  <header class="testata">
+    <div class="testata-interna">
+      <a class="marchio" href="index.html"><img src="assets/logo.svg" alt="Ogni Passaggio Conta"><span>Inviti ai tornei</span></a>
+      <nav class="menu" aria-label="Sezioni">
+        <a href="index.html">Invio</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="impostazioni.html" aria-current="page" data-solo-admin hidden>Impostazioni</a>
+      </nav>
+    </div>
+  </header>
+  <div class="onde" aria-hidden="true"></div>
+
+  <main>
+    <section class="intro">
+      <p class="sottotitolo">Configurazione</p>
+      <h1>Impostazioni</h1>
+      <p>Valori salvati solo in questo browser. Chi apre il sito da un altro computer deve reinserirli, oppure vanno messi come predefiniti in <code>js/config.js</code> (Client ID e ID del foglio non sono segreti: l'accesso lo regola Google).</p>
+    </section>
+
+    <section class="blocco" id="riservato" hidden>
+      <h2>Riservato agli amministratori</h2>
+      <p class="aiuto" id="motivo"></p>
+      <div id="account-riservato"></div>
+    </section>
+
+    <div class="griglia-2" id="pannello" hidden>
+      <form class="blocco" id="form">
+        <h2>Invio</h2>
+        <p class="aiuto">Il Client ID si crea una volta su Google Cloud Console: la procedura è nel README.</p>
+        <div class="campo">
+          <label for="googleClientId">Google OAuth Client ID</label>
+          <input type="text" id="googleClientId" placeholder="123456789-abc….apps.googleusercontent.com" autocomplete="off" spellcheck="false">
+          <small>Origine JavaScript da autorizzare per questa pagina: <code id="origine"></code></small>
+        </div>
+        <div class="campo"><label for="nomeMittente">Nome mittente</label><input type="text" id="nomeMittente"></div>
+        <div class="campo"><label for="replyTo">Rispondi a <small>(facoltativo)</small></label><input type="email" id="replyTo" placeholder="ognipassaggioconta@gmail.com"><small>Se vuoto, le risposte arrivano all'account che invia.</small></div>
+        <div class="campo"><label for="emailTest">Email per la modalità test <small>(facoltativo)</small></label><input type="email" id="emailTest"><small>Se vuoto, le mail di prova arrivano all'account che invia.</small></div>
+        <div class="campo"><label for="maxInviiTest">Mail per ogni invio di test</label><input type="number" id="maxInviiTest" min="1" max="20"></div>
+        <div class="campo"><label for="pausaSecondi">Secondi di pausa tra due mail</label><input type="number" id="pausaSecondi" min="2" max="60"><small>Una pausa riduce il rischio che Gmail segni l'account come spam.</small></div>
+        <div class="campo"><label for="limiteGiornaliero">Limite giornaliero</label><input type="number" id="limiteGiornaliero" min="1" max="2000"><small>Gmail gratuito: 500 destinatari al giorno (CC compresi). Google Workspace: 2.000.</small></div>
+        <button class="btn" type="submit">Salva</button>
+      </form>
+
+      <div>
+        <section class="blocco">
+          <h2>Foglio Google con i dati</h2>
+          <p class="aiuto">Elenco società, storico invii e stati stanno in un foglio Google privato. Lo vede solo chi ha ricevuto la condivisione: per dare accesso a una persona condividilo con lei da Google Sheets (ruolo Editor) e aggiungila agli utenti di test del progetto Google Cloud. Procedura passo passo nel README, sezione "Foglio Google con i dati".</p>
+          <div id="account"></div>
+          <div class="campo" style="margin-top:14px">
+            <label for="idFoglio">ID del foglio</label>
+            <input type="text" id="idFoglio" form="form" placeholder="1AbC…xyz" autocomplete="off" spellcheck="false">
+            <small>È la parte dell'indirizzo tra <code>/d/</code> e <code>/edit</code>. Puoi incollare anche l'indirizzo intero. Si salva con il pulsante Salva.</small>
+          </div>
+          <div class="riga">
+            <a class="btn secondario piccolo" id="apri-foglio" target="_blank" rel="noopener" hidden>Apri il foglio</a>
+            <button class="btn secondario piccolo" id="crea-foglio">Crea un foglio nuovo</button>
+          </div>
+          <p class="secondaria" id="stato-foglio" style="margin-top:12px"></p>
+        </section>
+
+        <section class="blocco">
+          <h2>Elenco società</h2>
+          <p class="aiuto">Per aggiornarlo rigenera <code>data/squadre.json</code> dai CSV con <code>python scripts/converti_csv.py</code> e caricalo qui: sostituisce tutta la scheda "Squadre" del foglio. Storico e stati non vengono toccati. Puoi anche modificare le righe direttamente nel foglio.</p>
+          <label class="btn prugna" for="carica-squadre">Carica squadre.json nel foglio</label>
+          <input type="file" id="carica-squadre" accept="application/json,.json" hidden>
+        </section>
+
+        <section class="blocco">
+          <h2>Pulizia</h2>
+          <p class="aiuto">Per eliminare invii di test o righe in errore, cancellale direttamente nella scheda "Invii" del foglio.</p>
+          <p class="secondaria" id="sospesi"></p>
+          <button class="btn secondario piccolo" id="riprova-sospesi" hidden>Salva ora sul foglio</button>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>Ogni Passaggio Conta</footer>
+  <script type="module" src="js/impostazioni.js"></script>
+</body>
+</html>

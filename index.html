@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invio inviti · Ogni Passaggio Conta</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalnia:wght@600;700&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/stile.css">
+</head>
+<body>
+  <header class="testata">
+    <div class="testata-interna">
+      <a class="marchio" href="index.html"><img src="assets/logo.svg" alt="Ogni Passaggio Conta"><span>Inviti ai tornei</span></a>
+      <nav class="menu" aria-label="Sezioni">
+        <a href="index.html" aria-current="page">Invio</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="impostazioni.html" data-solo-admin hidden>Impostazioni</a>
+      </nav>
+    </div>
+  </header>
+  <div class="onde" aria-hidden="true"></div>
+
+  <main>
+    <section class="intro">
+      <p class="sottotitolo">Tornei misti di sensibilizzazione</p>
+      <h1>Invita le società</h1>
+      <p>Scegli regione e categoria, controlla il messaggio e spedisci dal tuo account Gmail. Ogni invio finisce nella dashboard, così nessuna società riceve la stessa mail due volte.</p>
+    </section>
+
+    <section class="blocco" aria-labelledby="t-mittente">
+      <h2 id="t-mittente"><span class="passo">1</span>Account mittente</h2>
+      <p class="aiuto">Le mail partono dall'account Google con cui accedi. Il sito non vede né salva la password: Google concede due permessi (spedire email e usare il foglio condiviso con società e storico) che scadono dopo un'ora.</p>
+      <div id="account"></div>
+    </section>
+
+    <section class="blocco" aria-labelledby="t-destinatari">
+      <h2 id="t-destinatari"><span class="passo">2</span>Destinatari</h2>
+      <p class="aiuto">Le società con la stessa email (più squadre o categorie) ricevono una sola mail.</p>
+      <div id="stato-dati" class="nota">Caricamento…</div>
+
+      <div class="riga spazio"><span class="etichetta">Regione</span><span><button class="btn link" data-tutte="regioni">Tutte</button><button class="btn link" data-nessuna="regioni">Nessuna</button></span></div>
+      <div class="chips" id="regioni"></div>
+
+      <div class="riga spazio" style="margin-top:16px"><span class="etichetta">Categoria</span><span><button class="btn link" data-tutte="categorie">Tutte</button><button class="btn link" data-nessuna="categorie">Nessuna</button></span></div>
+      <div class="chips" id="categorie"></div>
+
+      <div class="riga" style="margin-top:18px">
+        <input type="search" id="cerca" placeholder="Cerca società, email, provincia…" style="max-width:340px">
+        <label class="check"><input type="checkbox" id="nascondi-contattate" checked> Escludi le società già contattate</label>
+        <label class="check"><input type="checkbox" id="cc-secondaria"> Metti in copia l'email secondaria</label>
+      </div>
+
+      <div class="riepilogo" id="riepilogo"></div>
+
+      <div class="riga spazio" style="margin-bottom:8px">
+        <span><button class="btn link" id="sel-tutti">Seleziona tutti</button><button class="btn link" id="sel-nessuno">Deseleziona tutti</button></span>
+        <span class="secondaria" id="conta-selezionati"></span>
+      </div>
+      <div class="contenitore-tabella">
+        <table>
+          <thead><tr><th style="width:34px"><span class="sr">Invia</span></th><th>Società</th><th>Categoria</th><th>Prov.</th><th>Email</th><th>Stato</th></tr></thead>
+          <tbody id="righe"></tbody>
+        </table>
+      </div>
+      <div class="campo" style="margin-top:18px">
+        <label for="manuali">Indirizzi aggiunti a mano <small>(facoltativo)</small></label>
+        <textarea id="manuali" style="min-height:96px" placeholder="Pro Loco Verona; info@prolocovr.it&#10;mario.rossi@gmail.com" spellcheck="false"></textarea>
+        <small>Uno per riga: <code>Nome; email</code> oppure solo l'email. Il nome va nel segnaposto <code>{{societa}}</code>; gli altri segnaposto per questi indirizzi non hanno valore, quindi vanno tolti dal testo. Compaiono in cima alla tabella, segnati "a mano", e finiscono nello storico come le società.</small>
+        <p class="secondaria" id="riepilogo-manuali"></p>
+      </div>
+    </section>
+
+    <div class="griglia-2">
+      <section class="blocco" aria-labelledby="t-messaggio">
+        <h2 id="t-messaggio"><span class="passo">3</span>Messaggio</h2>
+        <p class="aiuto">Clicca un segnaposto per inserirlo: viene sostituito con i dati di ogni società. Per formattare usa i pulsanti sopra il testo, che scrivono questi segni: <code>**grassetto**</code>, <code>*corsivo*</code>, <code>__sottolineato__</code>, <code>[testo](https://…)</code> per un link, <code>- </code> a inizio riga per un elenco, <code>## </code> per un titoletto.</p>
+        <div class="campo"><label for="campagna">Nome campagna <small>(per ritrovare gli invii nella dashboard)</small></label><input type="text" id="campagna"></div>
+        <div class="campo"><label for="oggetto">Oggetto</label><input type="text" id="oggetto"></div>
+        <div class="campo"><label for="corpo">Testo</label>
+          <div class="barra-formato" id="barra-formato" role="toolbar" aria-label="Formattazione del testo" aria-controls="corpo">
+            <button type="button" data-formato="grassetto" title="Grassetto (Ctrl+B)" aria-label="Grassetto"><strong>G</strong></button>
+            <button type="button" data-formato="corsivo" title="Corsivo (Ctrl+I)" aria-label="Corsivo"><em>C</em></button>
+            <button type="button" data-formato="sottolineato" title="Sottolineato (Ctrl+U)" aria-label="Sottolineato"><u>S</u></button>
+            <button type="button" data-formato="elenco" title="Elenco puntato" aria-label="Elenco puntato">&bull; Elenco</button>
+            <button type="button" data-formato="link" title="Link: scrivi l'indirizzo al posto di https://" aria-label="Link">Link</button>
+            <button type="button" data-formato="titoletto" title="Titoletto" aria-label="Titoletto">Titoletto</button>
+          </div>
+          <textarea id="corpo"></textarea>
+        </div>
+        <div class="chips" id="segnaposto"></div>
+        <div class="allegati">
+          <div class="riga">
+            <button type="button" class="btn secondario piccolo" id="allega">Allega file</button>
+            <input type="file" id="scegli-allegati" multiple hidden>
+            <span class="secondaria" id="totale-allegati"></span>
+          </div>
+          <ul class="elenco-allegati" id="elenco-allegati"></ul>
+          <ul class="allegati-scartati" id="allegati-scartati"></ul>
+          <p class="aiuto">Gli allegati valgono per tutte le mail di questo invio, fino a 10 MB in totale. Non vengono salvati: se ricarichi la pagina vanno scelti di nuovo. Sulle mail a chi non vi conosce aumentano il rischio di finire nello spam: per i file grandi meglio un link, per esempio a Google Drive.</p>
+        </div>
+        <div class="riga" style="margin-top:12px"><button class="btn link" id="ripristina">Ripristina il testo predefinito</button></div>
+      </section>
+
+      <section class="blocco" aria-labelledby="t-anteprima">
+        <h2 id="t-anteprima">Anteprima</h2>
+        <p class="aiuto" id="anteprima-per">Seleziona almeno un destinatario per vedere l'anteprima.</p>
+        <p class="nota" id="anteprima-oggetto" hidden></p>
+        <iframe class="anteprima" id="anteprima" title="Anteprima della mail" sandbox></iframe>
+        <p class="nota" id="anteprima-allegati" hidden></p>
+      </section>
+    </div>
+
+    <section class="blocco" aria-labelledby="t-invio">
+      <h2 id="t-invio"><span class="passo">4</span>Invio</h2>
+      <label class="interruttore" style="margin:6px 0 14px">
+        <input type="checkbox" id="modalita-test" checked>
+        <span><strong>Modalità test</strong><br><span class="secondaria" id="descr-test"></span></span>
+      </label>
+      <div id="controlli-invio"></div>
+      <div id="avanzamento" hidden>
+        <div class="riga spazio" style="margin:14px 0 6px"><strong id="testo-avanzamento"></strong><button class="btn secondario piccolo" id="interrompi">Interrompi</button></div>
+        <div class="barra"><div id="barra"></div></div>
+      </div>
+      <ul class="registro" id="registro"></ul>
+    </section>
+  </main>
+
+  <footer>Ogni Passaggio Conta · <a href="https://www.instagram.com/ognipassaggioconta">@ognipassaggioconta</a> · ognipassaggioconta@gmail.com</footer>
+  <script type="module" src="js/invio.js"></script>
+</body>
+</html>

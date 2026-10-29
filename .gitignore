@@ -1,0 +1,7 @@
+# Dati delle società: stanno nel foglio Google privato, mai nel repository pubblico
+*.csv
+data/
+# Presentazione originale (pesante, non serve al sito)
+*.pdf
+# Cartelle di lavoro di Claude Code (piani, review): non vanno nel sito pubblico
+.claude/

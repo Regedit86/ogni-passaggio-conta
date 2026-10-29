@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard invii · Ogni Passaggio Conta</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalnia:wght@600;700&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/stile.css">
+</head>
+<body>
+  <header class="testata">
+    <div class="testata-interna">
+      <a class="marchio" href="index.html"><img src="assets/logo.svg" alt="Ogni Passaggio Conta"><span>Inviti ai tornei</span></a>
+      <nav class="menu" aria-label="Sezioni">
+        <a href="index.html">Invio</a>
+        <a href="dashboard.html" aria-current="page">Dashboard</a>
+        <a href="impostazioni.html" data-solo-admin hidden>Impostazioni</a>
+      </nav>
+    </div>
+  </header>
+  <div class="onde" aria-hidden="true"></div>
+
+  <main>
+    <section class="intro">
+      <p class="sottotitolo">Chi abbiamo già raggiunto</p>
+      <h1>Dashboard</h1>
+      <p>Copertura per regione e categoria, andamento degli invii e storico completo di tutto il team. Segna qui le società che rispondono o aderiscono: lo stato viene salvato sul foglio condiviso.</p>
+    </section>
+
+    <section class="blocco">
+      <div id="account"></div>
+      <div id="stato-dati" class="nota" style="margin:14px 0 0">Caricamento…</div>
+    </section>
+
+    <div id="contenuto" hidden>
+    <div class="riga spazio" style="margin-bottom:16px">
+      <div class="riga">
+        <label class="check"><input type="checkbox" id="mostra-test"> Mostra gli invii di test</label>
+        <select id="filtro-campagna" style="width:auto;min-width:220px" aria-label="Campagna"></select>
+      </div>
+      <div class="riga">
+        <button class="btn secondario piccolo" id="esporta-csv">Esporta storico (CSV)</button>
+      </div>
+    </div>
+
+    <div class="kpi" id="kpi"></div>
+
+    <div class="griglia-2">
+      <section class="blocco">
+        <h2>Copertura per regione</h2>
+        <p class="aiuto">Società (email uniche) contattate sul totale disponibile.</p>
+        <div class="barre" id="per-regione"></div>
+      </section>
+      <section class="blocco">
+        <h2>Copertura per categoria</h2>
+        <p class="aiuto">Stesso calcolo, per categoria.</p>
+        <div class="barre" id="per-categoria"></div>
+        <h3>Invii per giorno</h3>
+        <div id="per-giorno"></div>
+      </section>
+    </div>
+
+    <section class="blocco">
+      <div class="riga spazio">
+        <h2>Storico invii</h2>
+        <input type="search" id="cerca" placeholder="Cerca società o email…" style="max-width:300px">
+      </div>
+      <p class="aiuto">Una riga per mail spedita. Lo stato della società vale per tutte le sue righe.</p>
+      <div class="contenitore-tabella">
+        <table>
+          <thead><tr><th>Data</th><th>Società</th><th>Regione / categoria</th><th>Email</th><th>Campagna</th><th>Esito</th><th>Stato società</th></tr></thead>
+          <tbody id="storico"></tbody>
+        </table>
+      </div>
+    </section>
+    </div>
+  </main>
+
+  <footer>Ogni Passaggio Conta · i dati stanno nel foglio Google condiviso.</footer>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
